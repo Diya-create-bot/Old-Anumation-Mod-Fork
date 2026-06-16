@@ -86,10 +86,13 @@ sourceSets {
 // Adds the Polyfrost maven repository so that we can get the libraries necessary to develop the mod.
 repositories {
     maven("https://repo.polyfrost.org/releases")
+    maven { url 'https://repo.essential.gg/repository/maven-public/' }
 }
 
 // Configures the libraries/dependencies for your mod.
 dependencies {
+    compileOnly "gg.essential:mixinextras-common:0.2.0-beta.9" // или более новую версию, например 0.4.0
+    annotationProcessor "gg.essential:mixinextras-common:0.2.0-beta.9"
     // Adds the OneConfig library, so we can develop with it.
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
 
