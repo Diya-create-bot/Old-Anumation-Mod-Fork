@@ -86,13 +86,15 @@ sourceSets {
 // Adds the Polyfrost maven repository so that we can get the libraries necessary to develop the mod.
 repositories {
     maven("https://repo.polyfrost.org/releases")
-    maven { url 'https://repo.essential.gg/repository/maven-public/' }
+    maven("https://repo.essential.gg/repository/maven-public/") // Исправили синтаксис под Kotlin DSL
 }
 
 // Configures the libraries/dependencies for your mod.
 dependencies {
-    compileOnly "gg.essential:mixinextras-common:0.2.0-beta.9" // или более новую версию, например 0.4.0
-    annotationProcessor "gg.essential:mixinextras-common:0.2.0-beta.9"
+    // Подключаем MixinExtras для компиляции миксинов самого корня
+    compileOnly("gg.essential:mixinextras-common:0.2.0-beta.9")
+    annotationProcessor("gg.essential:mixinextras-common:0.2.0-beta.9")
+
     // Adds the OneConfig library, so we can develop with it.
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
 
@@ -104,7 +106,6 @@ dependencies {
         shade("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta17")
     }
 }
-
 tasks {
     // Processes the `src/resources/mcmod.info or fabric.mod.json` and replaces
     // the mod id, name and version with the ones in `gradle.properties`
@@ -194,5 +195,15 @@ tasks {
         dependsOn(shadowJar)
         archiveClassifier.set("")
         enabled = false
+    }
+}
+subprojects {
+    repositories {
+        maven("https://repo.essential.gg/repository/maven-public/")
+    }
+    dependencies {
+        // Используем строковые литералы конфигураций для подпроектов в Kotlin DSL
+        "compileOnly"("gg.essential:mixinextras-common:0.2.0-beta.9")
+        "annotationProcessor"("gg.essential:mixinextras-common:0.2.0-beta.9")
     }
 }
