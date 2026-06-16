@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "sk1er_old_animations",
+    "name": "Sk1er Old Animations",
+    "description": "Replace animations & visuals removed in 1.8 with their old 1.7 visuals.",
+    "version": "${version}",
+    "mcversion": "${mcVersionStr}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Sk1er LLC"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
