@@ -11,28 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Используем актуальную v4 для скачивания кода
     - uses: actions/checkout@v4
 
-    # Настраиваем Java и включаем встроенное кэширование Gradle (заменяет старый actions/cache)
-    - name: Set up JDK 17
+    # Спускаемся на Java 8, которая жизненно необходима для этого мода
+    - name: Set up JDK 8
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '8'
         distribution: 'temurin'
-        cache: 'gradle' # Это автоматически кэширует зависимости БЕЗ вызова старого actions/cache v2!
+        cache: 'gradle'
 
-    # Даем права на запуск gradle-враппера
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    # Запускаем сборку проекта
+    # Запускаем сборку, принудительно заставляя Java компилировать в UTF-8
     - name: Build with Gradle
-      run: ./gradlew build
-
-    # Сохраняем готовый .jar файл используя ОПТИМИЗИРОВАННУЮ v4
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Compiled-Jar
-        path: build/libs/*.jar
+      run: ./gradlew build -Dfile.encoding=UTF-8
+      env:
+        JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"
