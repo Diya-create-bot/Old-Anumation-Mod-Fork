@@ -85,20 +85,24 @@ sourceSets {
 
 // Adds the Polyfrost maven repository so that we can get the libraries necessary to develop the mod.
 repositories {
+    mavenCentral() // Добавили MavenCentral, чтобы скачать рабочий MixinExtras
     maven("https://repo.polyfrost.org/releases")
-    maven("https://repo.essential.gg/repository/maven-public/") // Исправили синтаксис под Kotlin DSL
+    maven("https://repo.essential.gg/repository/maven-public/")
 }
 
 // Configures the libraries/dependencies for your mod.
 dependencies {
-    // Подключаем MixinExtras для компиляции миксинов самого корня
-    compileOnly("gg.essential:mixinextras-common:0.2.0-beta.9")
-    annotationProcessor("gg.essential:mixinextras-common:0.2.0-beta.9")
+    // ЗАМЕНЕНО: Используем официальный стабильный MixinExtras вместо удаленного из репозитория Essential
+    compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
+    annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
 
     // Adds the OneConfig library, so we can develop with it.
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
 
-    modRuntimeOnly("me.djtheredstoner:DevAuth-${if (platform.isFabric) "fabric" else if (platform.isLegacyForge) "forge-legacy" else "forge-latest"}:1.1.2")
+    // Опционально: добавили exclusion, чтобы убрать варнинги дубликатов классов от DevAuth
+    modRuntimeOnly("me.djtheredstoner:DevAuth-${if (platform.isFabric) "fabric" else if (platform.isLegacyForge) "forge-legacy" else "forge-latest"}:1.1.2") {
+        exclude(group = "com.electronwill.night-config")
+    }
 
     // If we are building for legacy forge, includes the launch wrapper with `shade` as we configured earlier.
     if (platform.isLegacyForge) {
@@ -199,11 +203,12 @@ tasks {
 }
 subprojects {
     repositories {
+        mavenCentral() // Добавили MavenCentral и для подпроектов
         maven("https://repo.essential.gg/repository/maven-public/")
     }
     dependencies {
-        // Используем строковые литералы конфигураций для подпроектов в Kotlin DSL
-        "compileOnly"("gg.essential:mixinextras-common:0.2.0-beta.9")
-        "annotationProcessor"("gg.essential:mixinextras-common:0.2.0-beta.9")
+        // ЗАМЕНЕНО: Обновили зависимости подпроектов на стабильный MixinExtras
+        "compileOnly"("io.github.llamalad7:mixinextras-common:0.3.5")
+        "annotationProcessor"("io.github.llamalad7:mixinextras-common:0.3.5")
     }
 }
